@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,8 +37,10 @@ import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
+import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelLeaderboardResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
@@ -59,10 +63,10 @@ public class ModelService {
 	private int PAGE_SIZE = 10;
 
 	@Autowired
-	ModelDao modelDao;
+	private ModelDao modelDao;
 	
 	@Autowired
-	BenchmarkProcessDao benchmarkProcessDao;
+	private BenchmarkProcessDao benchmarkProcessDao;
 
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
@@ -228,6 +232,20 @@ public class ModelService {
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
+	}
+
+
+
+	public ModelLeaderboardResponse searchLeaderboard(@Valid ModelLeaderboardRequest request) {
+		
+		List<BenchmarkProcess> list=benchmarkProcessDao.findAll();
+		List<ModelLeaderboardRequest> response = null;
+		for(BenchmarkProcess benchmarkProcess:list) {
+			response= modelDao.findModelByScore(benchmarkProcess.getScore());
+		}
+		
+		
+		return (ModelLeaderboardResponse) response;
 	}
 
 }

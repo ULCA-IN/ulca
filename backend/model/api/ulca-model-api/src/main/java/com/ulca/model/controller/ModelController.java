@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
+import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
@@ -75,6 +76,13 @@ public class ModelController {
 
 		log.info("******** Entry ModelController:: modelSeach *******");
 		return modelService.searchModel(request);
+	}
+	
+	@PostMapping("/leaderboard")
+	public ModelSearchResponse searchLeaderboard(@Valid @RequestBody ModelLeaderboardRequest request) {
+
+		log.info("******** Entry ModelController:: leaderboard *******");
+		return modelService.searchLeaderboard(request);
 	}
 	
 	

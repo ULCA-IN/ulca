@@ -23,5 +23,4 @@ public class ModelSearchRequest {
 	private String sourceLanguage;
 	
 	private String targetLanguage;
-	  
 }

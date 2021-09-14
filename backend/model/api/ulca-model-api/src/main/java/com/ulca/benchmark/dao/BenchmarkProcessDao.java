@@ -3,9 +3,11 @@ package com.ulca.benchmark.dao;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.model.request.ModelLeaderboardRequest;
 
 import io.swagger.model.Benchmark;
 
@@ -16,5 +18,5 @@ public interface BenchmarkProcessDao extends MongoRepository<BenchmarkProcess, S
 	List<BenchmarkProcess> findByBenchmarkProcessId(String benchmarkProcessId);
 	List<BenchmarkProcess> findByModelIdAndBenchmarkDatasetIdAndMetric(String modelId, String benchmarkId, String metric);
 	List<BenchmarkProcess> findByModelIdAndBenchmarkDatasetId(String modelId, String benchmarkId);
-	
+	List<ModelLeaderboardRequest> findByModelName(String score);
 }

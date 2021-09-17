@@ -187,4 +187,10 @@ public class BenchmarkService {
 		
 	}
 
+	public List<BenchmarkProcess> listBenchmarkDatasetBytask(String task) {
+		
+		List<BenchmarkProcess> list =  benchmarkprocessDao.findByMetric(task);
+		return list;
+	}
+
 }

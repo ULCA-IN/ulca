@@ -64,6 +64,17 @@ public class BenchmarkController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	
+	@GetMapping("/getBenchmarkDatasetByTask")
+	public ResponseEntity<List<BenchmarkProcess> > listBenchmarkDatasetBytask(@RequestParam String task) {
+
+		log.info("******** Entry BenchMarkController:: getByTask *******");
+
+		List<BenchmarkProcess> response = benchmarkService.listBenchmarkDatasetBytask(task);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	@GetMapping("/process/status")
 	public ResponseEntity<BmProcessListByProcessIdResponse> processStatus(@RequestParam String benchmarkProcessId){
 		

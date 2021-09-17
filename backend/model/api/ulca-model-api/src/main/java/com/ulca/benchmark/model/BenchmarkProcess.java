@@ -20,8 +20,7 @@ import lombok.Setter;
 public class BenchmarkProcess {
 	
 	@Id
-    String id;
-	
+    String id;	
 	String modelId;
 	String benchmarkProcessId;
 	String benchmarkDatasetId;

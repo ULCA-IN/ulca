@@ -1,6 +1,7 @@
 package com.ulca.model.dao;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,8 +15,9 @@ public class ModelExtended extends Model {
 	@JsonProperty("modelId")
 	private String modelId;
 	
-	@JsonProperty("versionName")
-	private String versionName;
+	@Indexed(unique=true)
+	@JsonProperty("version")
+	private String version;
 
 	@JsonProperty("userId")
 	private String userId;
@@ -39,6 +41,14 @@ public class ModelExtended extends Model {
 		return modelId;
 	}
 
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	public void setModelId(String modelId) {
 		this.modelId = modelId;
 	}
@@ -51,6 +61,7 @@ public class ModelExtended extends Model {
 	public String getUserId() {
 		return userId;
 	}
+	
 
 	public void setUserId(String userId) {
 		this.userId = userId;
@@ -97,6 +108,12 @@ public class ModelExtended extends Model {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "ModelExtended [modelId=" + modelId + ", version=" + version + ", userId=" + userId + ", submittedOn="
+				+ submittedOn + ", publishedOn=" + publishedOn + ", status=" + status + "]";
 	}
 
 	

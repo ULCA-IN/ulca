@@ -12,6 +12,8 @@ import io.swagger.model.Submitter;
 import io.swagger.model.TrainingDataset;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -24,11 +26,18 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
+@CompoundIndexes({
+    @CompoundIndex(name = "name_version", def = "{'Name': 1, 'version': 1}")
+})
 public class Model   {
 
   @Indexed(unique=true)
   @JsonProperty("name")
   private String name = null;
+  
+  @Indexed(unique=true)
+  @JsonProperty("version")
+  private String version;
 
   @JsonProperty("description")
   private String description = null;

@@ -13,6 +13,9 @@ public class ModelExtended extends Model {
 	@Id
 	@JsonProperty("modelId")
 	private String modelId;
+	
+	@JsonProperty("versionName")
+	private String versionName;
 
 	@JsonProperty("userId")
 	private String userId;

@@ -115,14 +115,17 @@ public class BenchmarkService {
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());		
 		benchmark.setSubmittedOn(new Date().toString());	
 		benchmark.setCreatedOn(new Date().toString());
+	    Benchmark isExist=	benchmarkDao.findByName(request.getDatasetName());
 		
-		if (benchmark != null) {
+		if (isExist!=null) {
 			try {
 				benchmarkDao.save(benchmark);
 			} catch (DuplicateKeyException ex) {
 				ex.printStackTrace();
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
+		}else {
+			throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 		}
 		String serviceRequestNumber=Utility.getBenchmarkDatasetSubmitReferenceNumber();
 		BenchmarkProcessTracker benchmarkprocessTracker = new BenchmarkProcessTracker();

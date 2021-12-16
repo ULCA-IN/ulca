@@ -19,5 +19,6 @@ public interface BenchmarkDao extends MongoRepository<Benchmark, String> {
 	List<Benchmark> findByTask(ModelTask task);
 	Page<Benchmark> findByUserId(String userId, Pageable paging);
 	List<Benchmark> findByUserId(String userId);
+	Benchmark findByName(String datasetName);
 	
 }

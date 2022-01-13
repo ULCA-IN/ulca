@@ -19,5 +19,6 @@ import lombok.Setter;
 public class ModelListResponseDto extends ModelExtended {
 	
 	List<BenchmarkProcess> benchmarkPerformance ;
+	private List<String> metric;
 
 }

@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.util.ModelConstants;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelNotFoundException;
@@ -85,6 +87,10 @@ public class ModelService {
 	@Autowired
 	WebClient.Builder builder;
 	
+	@Autowired
+	ModelConstants modelConstants;
+
+	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -122,20 +128,23 @@ public class ModelService {
 
 	public ModelListResponseDto getModelDescription(String modelId) {
 		log.info("******** Entry ModelService:: getModelDescription *******");
-		Optional<ModelExtended> result = modelDao.findById(modelId);
-
-		if (!result.isEmpty()) {
+		Optional<ModelExtended> results = modelDao.findById(modelId);
+		ModelExtended result= modelDao.findByModelId(modelId);
+		if (result != null) {
 			
-			ModelExtended model = result.get();
+			ModelExtended model = results.get();
+			List<String> metricList = modelConstants.getMetricList(result.getTask().getType().toString());
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
+			modelDto.setMetric(metricList);
 			
 			return modelDto;
 		}
 		return null;
 	}
+	
 
 	public String storeModelFile(MultipartFile file) throws Exception {
 		// Normalize file name

@@ -269,6 +269,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 							finalRecord.put("imageFileLocation",imageFileLocation);
 						} else {
 							failedCount++;
+							log.info("Increment of failed record :: "+failedCount);
+
 							taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 							datasetErrorPublishService.publishDatasetError("dataset-training",
 									"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
@@ -278,6 +280,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 
 					}
 					successCount++;
+					log.info("Increment of success record :: "+successCount);
+
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 
 					finalRecord.put("fileLocation", fileLocation);
@@ -291,6 +295,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 				} else {
 					log.info("file location not present :: " + fileLocation);
 					failedCount++;
+					log.info("Increment of failed record :: "+failedCount);
+
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					datasetErrorPublishService.publishDatasetError("dataset-training",
 							"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
@@ -385,6 +391,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 				} catch (Exception e) {
 
 					failedCount++;
+					log.info("Increment of failed record :: "+failedCount);
+
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					// send error event
 					datasetErrorPublishService.publishDatasetError("dataset-training",
@@ -409,6 +417,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 								finalRecord.put("imageFileLocation",imageFileLocation);
 							} else {
 								failedCount++;
+								log.info("Increment of failed record :: "+failedCount);
+
 								taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 								datasetErrorPublishService.publishDatasetError("dataset-training",
 										"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
@@ -418,6 +428,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 
 						}
 						successCount++;
+						log.info("Increment of success record :: "+successCount);
+
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 
 						finalRecord.put("fileLocation", fileLocation);
@@ -430,6 +442,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 
 					} else {
 						failedCount++;
+						log.info("Increment of failed record :: "+failedCount);
+
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 						datasetErrorPublishService.publishDatasetError("dataset-training",
 								"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
@@ -454,7 +468,7 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 
 		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber
-				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount);
+				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount +" total failed record ::"+failedCount);
 
 	}
 

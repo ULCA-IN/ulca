@@ -260,6 +260,8 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			} catch (Exception e) {
 
 				failedCount++;
+				log.info("Number of failure records: "+failedCount);
+
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_ROW_DATA_VALIDATION_FAILED",
 						e.getMessage(), serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
@@ -272,6 +274,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			if (rowSchema != null) {
 
 				successCount++;
+				log.info("Number of success records: "+successCount);
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 
 				JSONObject target = new JSONObject(dataRow);
@@ -302,7 +305,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
-				+ numberOfRecords + " success record :: " + successCount);
+				+ numberOfRecords + " success record :: " + successCount +" failed records :: "+failedCount);
 
 	}
 
@@ -379,6 +382,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 				} catch (Exception e) {
 
 					failedCount++;
+					log.info("Number of failure record :: "+failedCount);
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					datasetErrorPublishService.publishDatasetError("dataset-training",
 							"1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,
@@ -391,6 +395,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 				if (rowSchema != null) {
 
 					successCount++;
+					log.info("Number of success records :: "+successCount);
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 
 					JSONObject target = new JSONObject(dataRow);
@@ -430,7 +435,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 
 		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber
-				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount);
+				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount+" failed records :: "+failedCount);
 	}
 
 	public String getSha256Hash(String input) throws NoSuchAlgorithmException {

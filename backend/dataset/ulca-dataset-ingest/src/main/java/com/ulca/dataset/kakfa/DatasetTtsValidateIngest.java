@@ -247,6 +247,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 				rowSchema = mapper.readValue(dataRow, TtsRowSchema.class);
 			} catch (Exception e) {
 				failedCount++;
+				log.info("Increment of failure record :: "+failedCount);
+
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				// send error event
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_ROW_DATA_VALIDATION_FAILED",
@@ -267,6 +269,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 					// log.info("File Available :: " + fileLocation);
 					successCount++;
+					log.info("Increment of success record :: "+successCount);
+
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 					finalRecord.put("fileLocation", fileLocation);
 					UUID uid = UUID.randomUUID();
@@ -277,6 +281,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 				} else {
 					// log.info("File Not Available :: " + fileLocation);
 					failedCount++;
+					log.info("Increment of failure record :: "+failedCount);
+
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					datasetErrorPublishService.publishDatasetError("dataset-training",
 							"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
@@ -369,6 +375,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 				} catch (Exception e) {
 
 					failedCount++;
+					log.info("Increment of failure record :: "+failedCount);
+
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					// send error event
 					datasetErrorPublishService.publishDatasetError("dataset-training",
@@ -389,6 +397,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 					if (isFileAvailable(fileLocation)) {
 
 						successCount++;
+						log.info("Increment of success record :: "+successCount);
+
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 						finalRecord.put("fileLocation", fileLocation);
 						UUID uid = UUID.randomUUID();
@@ -398,6 +408,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 					} else {
 						failedCount++;
+						log.info("Increment of failure record :: "+failedCount);
+
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 						datasetErrorPublishService.publishDatasetError("dataset-training",
 								"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
@@ -423,7 +435,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 
 		log.info("Data sent for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
-				+ pseudoNumberOfRecords + " success record :: " + successCount);
+				+ pseudoNumberOfRecords + " success record :: " + successCount+" total failed count ::"+failedCount);
+
 
 	}
 

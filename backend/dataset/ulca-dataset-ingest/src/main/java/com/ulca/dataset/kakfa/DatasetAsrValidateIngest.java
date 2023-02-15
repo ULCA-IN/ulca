@@ -252,6 +252,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			} catch (Exception e) {
 
 				failedCount++;
+				log.info("Increment in failure record :: "+failedCount);
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				// send error event
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_ROW_DATA_VALIDATION_FAILED",
@@ -278,6 +279,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 							finalRecord.put("imageFileLocation",imageFileLocation);
 						} else {
 							failedCount++;
+							log.info("increment in failure records :: "+failedCount);
 							taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 							datasetErrorPublishService.publishDatasetError("dataset-training",
 									"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
@@ -289,6 +291,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 					// log.info("File Available :: " + fileLocation);
 					successCount++;
+					log.info("increment in success records :: "+successCount);
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 					finalRecord.put("fileLocation", fileLocation);
 					UUID uid = UUID.randomUUID();
@@ -300,6 +303,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 				} else {
 					// log.info("File Not Available :: " + fileLocation);
 					failedCount++;
+					log.info("increment in failure records :: "+failedCount);
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					datasetErrorPublishService.publishDatasetError("dataset-training",
 							"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
@@ -315,7 +319,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
-				+ numberOfRecords + " success record :: " + successCount);
+				+ numberOfRecords + " success record :: " + successCount + "total failed :: "+failedCount);
 
 		log.info(vModel.toString());
 
@@ -395,6 +399,8 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 				} catch (Exception e) {
 
 					failedCount++;
+					log.info("Increment of failure record :: "+failedCount);
+
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					// send error event
 					datasetErrorPublishService.publishDatasetError("dataset-training",
@@ -419,6 +425,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 								finalRecord.put("imageFileLocation",imageFileLocation);
 							} else {
 								failedCount++;
+								log.info("Increment of failure record :: "+failedCount);
 								taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 								datasetErrorPublishService.publishDatasetError("dataset-training",
 										"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
@@ -429,6 +436,8 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 						}
 
 						successCount++;
+						log.info("Increment of success record :: "+successCount);
+
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 						finalRecord.put("fileLocation", fileLocation);
 						UUID uid = UUID.randomUUID();
@@ -439,6 +448,8 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 						log.info(vModel.toString());
 					} else {
 						failedCount++;
+						log.info("Increment of failure record :: "+failedCount);
+
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 						datasetErrorPublishService.publishDatasetError("dataset-training",
 								"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
@@ -463,7 +474,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 
 		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber
-				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount);
+				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount+" total failed record ::"+failedCount);
 
 	}
 

@@ -251,7 +251,6 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		processedCount.put(proCountFailure);
 		details.put("processedCount", processedCount);
 		details.put("timeStamp", new Date().toString());
-
 		if (ingestComplete == 1 && (ingestSuccess + ingestError == count)) {
 			// update the end time for ingest
 			v1 = true;
